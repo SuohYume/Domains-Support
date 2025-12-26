@@ -113,12 +113,26 @@
 ### 1. 域名检查 API
 
 **端点**: `/api/check`
-**方法**: GET 或 POST
+**方法**: POST
 **认证**: 需要 API Token（通过 URL 参数或 Bearer Token）
 
-认证方式（二选一）：
-1. URL 参数：`/api/check?token=your_token`
-2. Bearer Token：`Authorization: Bearer your_token`
+**请求体 (JSON)**:
+当使用 `POST` 方法时，请求体必须为 JSON 格式，包含一个 `domains` 数组。
+```json
+{
+    "domains": [
+        "a.com",
+        "b.com",
+        "c.com"
+    ]
+}
+```
+**说明**:
+- `domains`: 包含要检查的域名字符串数组。程序将只对这些域名进行检查，并确保它们在数据库中存在且启用了通知。
+
+认证方式： 
+
+ Bearer Token：`Authorization: Bearer your_token`
 
 响应：
 ```json
@@ -137,6 +151,7 @@
     }
 }
 ```
+**注意**: 离线和过期通知现在会进行汇总，以减少子请求数量。通知详情将通过 Telegram 或微信发送。
 
 ### 2. 域名列表 API
 
